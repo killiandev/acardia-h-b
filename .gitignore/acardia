@@ -1,0 +1,366 @@
+const Discord = require('discord.js')
+const client = new Discord.Client()
+const low = require("lowdb")
+
+client.setMaxListeners(20)
+
+prefix = "/"
+
+client.on('ready', () => {
+  client.user.setStatus("idle")
+})
+client.on('ready', () => {
+  const activities = [
+      "developped by killian",
+      `🌌Arcadia🌌`,
+      `Gère ${client.users.size} Membre.`
+  
+    ];
+    client.setInterval(() => {
+        const index = Math.floor(Math.random() * activities.length);
+        client.user.setActivity(activities[index], {
+            type: "LISTENING",
+            url: "http://twitch.tv/client"
+        });
+    }, 5000);
+  });
+
+client.login('Njg5NjU2MzMxMTkxNTgyODMz.XnGWLA.tQYK8L-KFHYYLniwPuz7zg0WRQo')
+
+
+
+client.on('message', message => {
+  const args = message.content.slice(prefix.length).trim().split(/ +/g);
+  const command = args.shift().toLowerCase();
+
+  
+
+  if(message.content === prefix + "setup"){
+    if(message.member.permissions.has('ADMINISTRATOR')){
+    if(!infoch){
+      message.guild.createChannel("👥・reports")
+      var embedinfo = new Discord.RichEmbed()
+      .addField(":hammer: Setup" , ":white_check_mark: ")
+      .addField("Info Setup", "Serveur setup à 100%")
+      message.channel.send(embedinfo)
+      message.reply("Merci d'avoir installé le bot.")
+     
+        
+       }else{
+         message.channel.send("Le serveur est déjà setup")
+        
+        }
+  
+        
+    
+  }else{
+    message.reply("Tu n'as pas la permission de setup le serveur")
+  }
+    
+}
+
+
+
+  if(message.content === prefix + "help"){
+    message.delete()
+    message.channel.send({embed :{
+      color : 3447003 ,
+      author : {
+        name: client.user.username ,
+        icon_url : client.user.avatarURL
+      },
+      title: "Voici les commandes du bot",
+      description : ":exclamation: __Bot off de 🌌Arcadia🌌__ :exclamation:",
+      fields : [{
+        name: "___Commandes Important___",
+        value: "**/help** \n \n**:page_with_curl: /info** informations utiles \n \n**:robot: /botinfo** informations du bot\n \n**:notepad_spiral: /serverlist** liste des serveurs discord du bot\n \n**:outbox_tray: /kick** <__mentionner le joueur__>\n \n**:exclamation: /alerte** (__texte__) seulement pour les administrateurs\n \n**:hammer: /ban** <__mentionner le joueur__>\n \n**:tickets: /ticket** <__texte__> vous devez avoir un salon textuel avec ce nom 'support' sinon ça ne marchera pas\n \n:pencil2: **/servername** <__texte__> changer le nom du serveur \n \n :mega: **/setup** le bot setup le serveur pour commencer à mettre des pub \n"
+
+      },{
+        name: "__serveur__",
+        value:":link: [Lien]() \n:link: [Rejoindre le serveur officiel](https://discord.gg/XRmCuxB)"
+      }
+    ]
+
+      ,
+      timestamp: new Date(),
+      footer: {
+        text: "Requête de " + message.author.username + "#" + message.author.discriminator 
+      }
+    }})
+  }
+  if(message.content === prefix + "info"){
+   
+    message.channel.send({embed : {
+      color: 3447003 ,
+      author: {
+        name: client.user.username ,
+        icon_url: client.user.avatarURL
+      },
+      title: "Info utile",
+      timestamp: new Date(),
+      footer: {
+        text:`Requête de ${message.author.username}#${message.author.discriminator}`
+ 
+      },
+      description: `Arcadia` ,
+      fields : [{
+        name: "Informations du serveur",
+        value: `:pencil: Nom du serveur : **${message.guild.name}**` +  `\n \n :alarm_clock: Serveur créer le : **${message.guild.createdAt}**` + `\n \n :busts_in_silhouette: Utilisateurs sur le discord : **${message.guild.memberCount}** \n \n :crown: Le fondateur du serveur : **${message.guild.owner.user}** \n \n :briefcase: Rôles : **${message.guild.roles.size}** Rôles sur le serveur \n \n :shield: Niveau de vérification du serveur : **${message.guild.verificationLevel}** \n \n :keyboard: Salons Textuels : **${message.guild.channels.filter(fn => fn.type === "text").size}** \n \n :speaking_head: Salons vocaux : **${message.guild.channels.filter(fn => fn.type === "voice").size}**` ,
+      },{
+        name: "Informations personnelle",
+        value: `:alarm_clock: Tu as rejoin le : **${message.member.joinedAt}** ` + `\n \n :pencil2: Pseudo : **${message.author.username}#${message.author.discriminator}** \n \n`
+      }
+      ]
+    }
+    })
+  }
+  if(message.content === prefix + "botinfo"){
+    let totalSeconds = (client.uptime / 1000);
+    let hours = Math.floor(totalSeconds / 3600);
+    totalSeconds %= 3600;
+    let minutes = Math.floor(totalSeconds / 60);
+    let seconds = totalSeconds % 60;
+    let uptime = `${hours} hours, ${minutes} minutes and ${seconds} seconds`;
+    message.channel.send({embed: {
+      color: 3447003,
+      author: {
+        name: client.user.username ,
+        icon_url: client.user.avatarURL
+      },
+      title: "Informations du bot",
+      description: "**Info bot**",
+      timestamp: new Date(),
+      footer: {
+        text: `Requête de ${message.author.username}#${message.author.discriminator}`
+      },
+      fields: [{
+        name: ":pencil2: Pseudo du bot",
+        value: "Arcadia" 
+      },
+      {
+        name: ":computer: Développeur Principale du bot",
+        value: "** !'#0001**"
+      },
+      {
+        name:":gear: Bot développer en",
+        value:"**Javascript** (__[Node.js](https://nodejs.org/fr/)__)"
+      },
+      {
+        name: ":bar_chart: Je suis sur",
+        value: `**${client.guilds.size}** ___Serveurs___ | **${client.users.size}** ___Utilisateurs___`
+      },
+      {
+        name: ":satellite: Connecter depuis",
+        value: `**${hours}** Heures , **${minutes}** Minutes , **${seconds}** Secondes`
+      }
+    ]
+    }})
+  }
+  
+  if(message.content === prefix + "serverlist"){
+    timestamp = new Date()
+    var list = new Discord.RichEmbed()
+        .setAuthor(client.user.username , client.user.avatarURL)
+        .addField("Serveurs Discord" , client.guilds.map(r => r.name + ` | **${r.memberCount}** Utilisateurs :busts_in_silhouette:`))
+        .setFooter(`Requête de ${message.author.tag}  `)
+        .setTimestamp(timestamp)
+        .setColor(3447003)
+      message.channel.sendEmbed(list)
+  }
+  if (message.content.startsWith('/kick')) {
+    const user = message.mentions.users.first();
+    if (user) {
+      const member = message.guild.member(user);
+      if (member) {
+        message.mentions.users.first().send("tu as été kick du serveur !")
+        member.kick('Raison du kick').then(() => {
+          message.reply(`${user.tag} à été kick du serveur`);
+        }).catch(err => {
+          message.reply('tu peux pas le kick');
+          console.error(err);
+        });
+      } else {
+        message.reply('Erreur');
+      }
+    } else {
+      message.reply("tu n'as pas mentionner le joueur à kick ! ");
+    }
+  }
+  if(command === "al"){
+    let text = args.join(" ")
+    let perms = message.member.permissions;
+    let has_kick = perms.has("ADMINISTRATOR");
+    
+    if(has_kick){
+      timestamp = new Date()
+      message.delete()
+      message.channel.send("@everyone")      
+      message.channel.send({embed : {
+        color : 15158332 ,
+        
+        title: ":no_entry: Message Important :no_entry:",
+        description: `**===================** \n \n **${message.author.username}** vous dit : **${text}** \n \n **===================**` ,
+        fields: [
+        
+      
+        
+      ],
+        timestamp : new Date(),
+        footer: {
+          text: `Alerte donner par ${message.author.username}`
+        }
+        
+      }})   
+    }else{
+      message.reply("tu n'as pas la permission !")
+    }
+  }
+  if(command === "ban"){
+    author = message.author
+    
+    if(message.member.hasPermission('BAN_MEMBERS')){
+      const member = message.mentions.members.first()
+      if(!member) return message.reply("tu n'as pas mentionner le joueur")
+        message.mentions.members.first().send("Tu as été banni.")
+        member.ban().then(member => {
+        message.reply(`${member.user.username} à été banni`)
+        
+        })
+        
+  
+    
+  
+    }else{
+      message.reply("tu n'as pas la permission")
+    }
+  }
+  if(message.content === prefix + "ping"){
+    var ping = new Discord.RichEmbed()
+      .addField(":ping_pong: Pong" , `**${message.createdTimestamp - Date.now()} ms**`)
+      .setFooter(`Requête de ${message.author.username}`)
+    message.channel.sendEmbed(ping)
+  }
+  tie = '/report'
+  if(message.content.startsWith(tie)){
+   
+    textee = args.slice(0).join(' ')
+    timestamp = new Date()
+    
+    tt = message.content.substring(tie.length)
+      support = message.guild.channels.find('name', '👥・reports')
+      
+      if(!message.guild.channels.find('name',  '👥・reports')){
+        message.reply("Désoler mais ce serveur n'a pas de salon reports ")
+      }else{
+      
+      var tickete = new Discord.RichEmbed()
+         .setTimestamp(timestamp)
+         .setFooter(`${message.author.username} à besoin d'aide `)        
+         .addField("Pseudo" , `${message.author.username}`)
+         .addField("Message " , `${textee} \n \nQuand vous aurez fini d'aidez cette personne merci de mettre une réaction :white_check_mark:`)
+         
+        support.sendEmbed(tickete)
+
+      
+      message.reply("le staff va prendre en charge ton ticket merci de patienter.")
+      
+      }
+  }
+    
+  
+  serveurname = '/changename'
+
+  if(message.content.startsWith(serveurname)){
+    serve = args.slice(0).join(" ")
+    if(message.member.hasPermission('ADMINISTRATOR')){
+      message.guild.setName( serve , "Demander par l'administrateur")
+      
+      message.channel.send(`@everyone`)
+      timestamp = new Date()
+      function intervall() {
+      var servername = new Discord.RichEmbed()
+        .setTimestamp(timestamp)
+        .setFooter(`Nom du serveur changer par ${message.author.username}`)
+        .addField(`:pencil2: Nouveau nom du serveur` , `**${message.guild.name}**`)
+        .addField(`:crown: Fondateur du serveur` , `**${message.guild.owner}**`) 
+        message.channel.sendEmbed(servername)
+      }
+      setTimeout(intervall , 1200 , 'fun')
+    }else{
+      message.reply("Tu n'as pas la permission de changer le nom du serveur")
+    }
+  }
+
+  client.on('message' , async message => {
+  const args = message.content.slice(prefix.length).trim().split(/ +/g);
+  const command = args.shift().toLowerCase();
+
+  
+
+})
+})
+
+client.on("guildMemberAdd", user => {
+  user.guild.channels.get("689673223037780026").send("Bienvenue à"  + user +  "🌌Arcadia🌌")
+});
+
+
+client.on("message", message => {
+  let a = 0;
+  if (message.content.startsWith(prefix + "dmall")) {
+    message.delete()
+    if (!message.member.hasPermission("ADMINISTRATOR")) {
+      let admin_embed = new Discord.RichEmbed()
+        .setColor("black")
+        .setTitle(
+          message.author.username +
+            ", Vous n'avez pas la permission d'effectuer cette commande !"
+        )
+        .setTimestamp();
+      return message.channel.send({ embed: admin_embed });
+    }
+    let arg = message.content.slice(6);
+    if (!arg) {
+      return message.channel.send(
+        ">>> **𝐏𝐫𝐞́𝐜𝐢𝐬𝐞 𝐮𝐧 𝐌𝐞𝐬𝐬𝐚𝐠𝐞! :writing_hand:** "
+      );
+    } else {
+      var embed_embed = new Discord.RichEmbed()
+        .setTitle("⌛️ Publicité en cours") // Calling method setTitle on constructor.
+        .setAuthor(message.author.username, message.author.avatarURL)
+        .setDescription(
+          "**Le message Si dessous a Bien été envoyer a " +
+            client.guilds.size +
+            " Serveurs!**"
+        )
+        .addField(
+         
+          "Il y a " +
+            client.users.size +
+            " membres qui ne sont pas des bots qui vont potentiellement la recevoir"
+        )
+        .setColor("12E5F8");
+ 
+      message.channel.send(embed_embed);
+      let pp = message.guild.channels.find(x => x.name === "mplogs");
+ 
+      client.users.forEach(o => {
+        let emb = new Discord.RichEmbed()
+        .setColor("0FFF00")
+        .setThumbnail(o.displayAvatarURL)
+        .setTitle(`${o.tag} a bien reçu la pub`)
+        message.guild.channels.get("689681324541607987").send(emb)
+        o.send(arg).catch(err => {
+          let b = a++;
+          if (err) {
+            let emb_err = new Discord.RichEmbed()
+            .setColor("FF0000")
+            .setThumbnail(o.displayAvatarURL)
+            .setTitle(`${o.tag} n'a pas reçu la pub !`)
+          message.guild.channels.get("689681324541607987").send(emb.err)
+        }
+        });
+      });
+    }
+  }
+});
