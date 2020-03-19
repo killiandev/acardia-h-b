@@ -25,7 +25,7 @@ client.on('ready', () => {
     }, 5000);
   });
 
-client.login('Njg5NjU2MzMxMTkxNTgyODMz.XnGWLA.tQYK8L-KFHYYLniwPuz7zg0WRQo')
+client.login(process.env.TOKEN)
 
 
 
